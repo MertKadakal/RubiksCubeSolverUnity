@@ -8,7 +8,7 @@ Proje, Rubik küpü **üst satırdan başlanarak** üç satır halinde sırasıy
 
 ---
 
-### 1. Üstte Beyaz Artı Oluşturma
+### HAREKET1
 
 - Eğer küp doğru pozisyonda ve yöndeyse işlem tamamlanır.
 - Değilse, bir **Empty GameObject** kullanılarak kübün kenarları kontrol edilir. Beyaz yüzün hangi yöne baktığı belirlenir.
@@ -19,7 +19,35 @@ Proje, Rubik küpü **üst satırdan başlanarak** üç satır halinde sırasıy
 
 ---
 
-### 2. HAREKET4
+### HAREKET2
+
+- Üst ve orta satırdaki orta küpler kontrol edilir, dikey olarak eşleşen renkler tespit edilir.
+- Hiçbiri eşleşmemişse rastgele bir konumda algoritma çalıştırılır.
+- İkisi eşleşmişse;
+  - **Eşleşenler komşuysa:** Soldaki sola alınır ve algoritma çalıştırılır.
+  - **Eşleşenler karşılıklıysa:** Eşleşenlerden biri öne alınır ve algoritma çalıştırılarak komşu haline getirilir. Ardından komşu durumu için işlem tekrar edilir.
+
+---
+
+### HAREKET3
+
+- Küpün yerleştirileceği köşe sağ üst köşeye getirilir.
+- Oraya yerleştirilecek küp sağ alt köşeye getirilir ve uygun pozisyonda sağ üst köşeye yerleşene kadar algoritma tekrarlanır.
+- Bu döngü eşleşmemiş tüm köşeler için devam eder ve ardından üst satır tamamlanmış olur.
+
+---
+
+### HAREKET4
+
+- Küp dikey olarak tam ters çevrilir.
+- Üst satır ve orta satırdaki orta küpler kontrol edilir, dikey olarak eşleşen renkler tespit edilir.
+- Eşleşen ikili, öne bakacak pozisyona getirilir.
+- Üst orta satırdaki küpün yerleştirileceği yerin **solda mı sağda mı** olduğuna göre algoritma çalıştırılır.
+- Eşleşmemiş tüm dikey ikililer için bu döngü tekrarlanır ve ardından orta satır tamamlanmış olur.
+
+---
+
+### HAREKET5
 
 - **Doğru pozisyonda olan küpler** (kırmızı yüzleri yukarı bakanlar) sayılır:
   - **4 küp doğruysa** işlem tamamdır.
@@ -31,7 +59,7 @@ Proje, Rubik küpü **üst satırdan başlanarak** üç satır halinde sırasıy
 
 ---
 
-### 3. HAREKET5
+### HAREKET6
 
 - **Üst orta parçalar** kontrol edilir:
   - Hepsi eşleşmişse → işlem tamamlanır.
@@ -41,7 +69,7 @@ Proje, Rubik küpü **üst satırdan başlanarak** üç satır halinde sırasıy
 
 ---
 
-### 4. HAREKET6
+### HAREKET7
 
 - **Uyuşan köşe** var mı kontrol edilir:
   - Yoksa → rastgele bir pozisyondayken algoritma çalıştırılır → ardından başa dönülür.
@@ -54,8 +82,14 @@ Proje, Rubik küpü **üst satırdan başlanarak** üç satır halinde sırasıy
 
 Projenin **doğru şekilde çalışabilmesi** için aşağıdaki klasörü indirip projenin ana dizinine eklemeniz gerekmektedir:
 
-📂 **Gerekli Dosyalar:**  
+**Gerekli Dosyalar:**  
 [→ Dosyayı İndir](https://drive.google.com/drive/folders/15iPpTxV7x-MSgYt93GHXABTFbx3EUJyw?usp=sharing)
+
+---
+
+## Örnek Video
+
+[→ Videoyu İzle](https://drive.google.com/file/d/1_QgYbjC7JB_KD7pdaHs7JG2l-GxUKNNj/view?usp=sharing)
 
 ---
 
@@ -63,10 +97,10 @@ Projenin **doğru şekilde çalışabilmesi** için aşağıdaki klasörü indir
 
 1. Bağlantıdaki klasörü projenin kök dizinine ekleyin.
 2. Unity üzerinde projeyi açın ve çalıştırın.
-3. Boşluk tuşuna bastığınızda rubik ilk önce karılacak ve ardından çözülecektir. Çözüm aşamalarında tamamlanan adımlar bildirilir.
+3. **Boşluk** tuşuna bastığınızda rubik ilk önce karılacak ve ardından çözülecektir. Çözüm aşamalarında tamamlanan adımlar bildirilir.
 
 ---
 
 ## Not
 
-Proje hâlâ geliştirme aşamasındadır. Nadiren de olsa çözüm algoritmalarında **3 adım civarında yanlışlıklar** oluşabilmektedir. İlerleyen sürümlerde bu hatalar minimize edilecektir.
+Proje hâlâ geliştirme aşamasındadır. Nadiren de olsa çözüm algoritmalarında **(HAREKET1, HAREKET2 ve HAREKET5)** ufak bozulmalar oluşabilmektedir. İlerleyen sürümlerde bu hatalar minimize edilecektir.
