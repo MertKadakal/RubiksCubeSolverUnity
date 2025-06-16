@@ -131,34 +131,61 @@ public class motor : MonoBehaviour
             {
                 if (cube.transform.position.z == 1)
                 {
-                    while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON))
+                    if (ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA))
                     {
-                        ust_sola(); yield return Bekle();
+                        while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON))
+                        {
+                            ust_sola(); yield return Bekle(); Debug.Log("a");
+                        }
                     }
+                    
                     on_saga(); yield return Bekle();
                 }
                 if (cube.transform.position.z == -1)
                 {
-                    while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA))
+                    if (ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA))
                     {
-                        ust_sola(); yield return Bekle();
+                        while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA))
+                        {
+                            ust_sola(); yield return Bekle(); Debug.Log("b");
+                        }
                     }
+                    
                     arka_saga(); yield return Bekle();
                 }
 
                 if (cube.transform.position.x == 1)
                 {
-                    while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL))
+                    if (ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA))
                     {
-                        ust_sola(); yield return Bekle();
+                        while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL))
+                        {
+                            ust_sola(); yield return Bekle(); Debug.Log("c");
+                        }
                     }
+                    
                     sol_asagi(); yield return Bekle();
                 }
                 if (cube.transform.position.x == -1)
                 {
-                    while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG))
+                    if (ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA))
                     {
-                        ust_sola(); yield return Bekle();
+                        while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG))
+                        {
+                            ust_sola(); yield return Bekle(); Debug.Log("d");
+                        }
                     }
                     sag_asagi(); yield return Bekle();
                 }
@@ -195,10 +222,12 @@ public class motor : MonoBehaviour
 
     bool ust_kenar_bos_kontrol(GameObject kontrol)
     {
-        return Vector3.Distance(kontrol.transform.position, topws[0].transform.position) > 0.05f &&
-                Vector3.Distance(kontrol.transform.position, topws[1].transform.position) > 0.05f &&
-                Vector3.Distance(kontrol.transform.position, topws[2].transform.position) > 0.05f &&
-                Vector3.Distance(kontrol.transform.position, topws[3].transform.position) > 0.05f;
+        foreach (var ws in topws)
+        {
+            if (Vector3.Distance(kontrol.transform.position, ws.transform.position) <= 0.05f)
+                return false;
+        }
+        return true;
     }
 
     (bool sol, bool sag, bool ust, bool alt, bool on, bool arka) byz_kontrol_results(GameObject cube, int ws_ind)
@@ -909,7 +938,7 @@ public class motor : MonoBehaviour
 
     WaitForSeconds Bekle()
     {
-        return new WaitForSeconds(0.1f);
+        return new WaitForSeconds(0.2f);
     }
 
     private IEnumerator RotateSequence()
@@ -940,7 +969,7 @@ public class motor : MonoBehaviour
             }
 
             // Bekleme süresi: her dönüş arasında biraz zaman tanı
-            yield return new WaitForSeconds(0.1f); // istersen bu süreyi azalt veya artır
+            yield return Bekle(); // istersen bu süreyi azalt veya artır
         }
     }
 
@@ -1052,7 +1081,7 @@ public class motor : MonoBehaviour
 
         Quaternion endRotation = startRotation * deltaRotation;
 
-        float duration = 0f;
+        float duration = 0.1f;
         float elapsed = 0f;
 
         while (elapsed < duration)
