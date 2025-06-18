@@ -103,4 +103,4 @@ Projenin **doğru şekilde çalışabilmesi** için aşağıdaki klasörü indir
 
 ## Not
 
-Proje hâlâ geliştirme aşamasındadır. Nadiren de olsa çözüm algoritmalarında **(HAREKET2 ve HAREKET5)** ufak bozulmalar oluşabilmektedir. İlerleyen sürümlerde bu hatalar minimize edilecektir.
+Proje hâlâ geliştirme aşamasındadır. Nadiren de olsa **(HAREKET5)** aşamasında ufak bozulmalar oluşabilmektedir. İlerleyen sürümlerde bu hatalar minimize edilecektir.
