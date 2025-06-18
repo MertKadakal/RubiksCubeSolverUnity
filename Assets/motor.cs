@@ -121,6 +121,14 @@ public class motor : MonoBehaviour
 
     IEnumerator arti_olustur_ara_islem(GameObject cube, int ws_ind)
     {
+        bool kenarlar_tumu_bos_mu()
+        {
+            return ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON) ||
+                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA);
+        }
+
         if (byz_kontrol_results(cube, ws_ind).ust)
         {
             //Debug.Log(cube.name + " yerleştirildi");
@@ -131,60 +139,48 @@ public class motor : MonoBehaviour
             {
                 if (cube.transform.position.z == 1)
                 {
-                    if (ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA))
+                    if (kenarlar_tumu_bos_mu())
                     {
                         while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON))
                         {
-                            ust_sola(); yield return Bekle(); Debug.Log("a");
+                            ust_sola(); yield return Bekle();
                         }
                     }
-                    
+
                     on_saga(); yield return Bekle();
                 }
                 if (cube.transform.position.z == -1)
                 {
-                    if (ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA))
+                    if (kenarlar_tumu_bos_mu())
                     {
                         while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA))
                         {
-                            ust_sola(); yield return Bekle(); Debug.Log("b");
+                            ust_sola(); yield return Bekle();
                         }
                     }
-                    
+
                     arka_saga(); yield return Bekle();
                 }
 
                 if (cube.transform.position.x == 1)
                 {
-                    if (ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA))
+                    if (kenarlar_tumu_bos_mu())
                     {
                         while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL))
                         {
-                            ust_sola(); yield return Bekle(); Debug.Log("c");
+                            ust_sola(); yield return Bekle();
                         }
                     }
-                    
+
                     sol_asagi(); yield return Bekle();
                 }
                 if (cube.transform.position.x == -1)
                 {
-                    if (ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SOL) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ON) ||
-                        ust_kenar_bos_kontrol(sag_ust_orta_kontrol_ARKA))
+                    if (kenarlar_tumu_bos_mu())
                     {
                         while (!ust_kenar_bos_kontrol(sag_ust_orta_kontrol_SAG))
                         {
-                            ust_sola(); yield return Bekle(); Debug.Log("d");
+                            ust_sola(); yield return Bekle();
                         }
                     }
                     sag_asagi(); yield return Bekle();
@@ -244,7 +240,6 @@ public class motor : MonoBehaviour
 
         return (sol, sag, ust, alt, on, arka);
     }
-
 
     IEnumerator Hareket6()
     {
@@ -467,7 +462,6 @@ public class motor : MonoBehaviour
         }
         return matched;
     }
-
 
     IEnumerator hareket5_algoritma()
     {
@@ -819,9 +813,10 @@ public class motor : MonoBehaviour
         GameObject cube3 = FindCubeByName("3");
 
         int max = 0;
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
         {
             int j = 0;
+            
             if (KupleHizaliMi(cube13, cube5)) { j++; }
             if (KupleHizaliMi(cube10, cube1)) { j++; }
             if (KupleHizaliMi(cube15, cube7)) { j++; }
@@ -830,10 +825,17 @@ public class motor : MonoBehaviour
             if (j > max)
             {
                 max = j;
+
+                hiza1 = KupleHizaliMi(cube13, cube5);
+                hiza2 = KupleHizaliMi(cube10, cube1);
+                hiza3 = KupleHizaliMi(cube15, cube7);
+                hiza4 = KupleHizaliMi(cube12, cube3);
             }
 
             orta_saga(); yield return Bekle();
         }
+
+        Debug.Log((hiza1, hiza2, hiza3, hiza4));
 
         if (max == 4)
         {
@@ -845,57 +847,49 @@ public class motor : MonoBehaviour
 
         if (max == 2)
         {
-            int i = 0;
-            while (i < 2)
-            {
-                i = 0;
-                hiza1 = hiza2 = hiza3 = hiza4 = false;
-
-                orta_saga(); yield return Bekle();
-
-                if (KupleHizaliMi(cube13, cube5)) { i++; hiza1 = true; }
-                if (KupleHizaliMi(cube10, cube1)) { i++; hiza2 = true; }
-                if (KupleHizaliMi(cube15, cube7)) { i++; hiza3 = true; }
-                if (KupleHizaliMi(cube12, cube3)) { i++; hiza4 = true; }
-            }
-
             //karşılıklıysa
             if ((hiza2 && hiza3) || (hiza1 && hiza4))
             {
                 if (hiza2 && hiza3)
                 {
-                    while (cube15.transform.position.z == 1)
+                    while (cube15.transform.position.z != 1)
+                    {
+                        orta_saga(); yield return Bekle();
+                    }
+                    while (cube7.transform.position.z != 1)
                     {
                         ust_saga(); yield return Bekle();
-                        orta_saga(); yield return Bekle();
                     }
                 }
                 if (hiza1 && hiza4)
                 {
-                    while (cube13.transform.position.z == 1)
+                    while (cube13.transform.position.z != 1)
+                    {
+                        orta_saga(); yield return Bekle();
+                    }
+                    while (cube5.transform.position.z != 1)
                     {
                         ust_saga(); yield return Bekle();
-                        orta_saga(); yield return Bekle();
                     }
                 }
                 yield return NihaiHareket();
-                ust_saga(); yield return Bekle();
+                ust_sola(); yield return Bekle();
+                ust_sola(); yield return Bekle();
+                orta_sola(); yield return Bekle();
                 yield return NihaiHareket();
             }
             else // komşuysa
             {
-                i = 0;
-                while (i < 2)
+                int i = 0;
+                while (i != 2)
                 {
+                    ust_sola(); yield return Bekle();
+
                     i = 0;
-                    hiza1 = hiza2 = hiza3 = hiza4 = false;
-
-                    orta_saga(); yield return Bekle();
-
-                    if (KupleHizaliMi(cube13, cube5)) { i++; hiza1 = true; }
-                    if (KupleHizaliMi(cube10, cube1)) { i++; hiza2 = true; }
-                    if (KupleHizaliMi(cube15, cube7)) { i++; hiza3 = true; }
-                    if (KupleHizaliMi(cube12, cube3)) { i++; hiza4 = true; }
+                    if (KupleHizaliMi(cube13, cube5)) { i++; }
+                    if (KupleHizaliMi(cube10, cube1)) { i++; }
+                    if (KupleHizaliMi(cube15, cube7)) { i++; }
+                    if (KupleHizaliMi(cube12, cube3)) { i++; }
                 }
 
                 if (hiza1 && hiza3) yield return HizaAyari(cube5);
@@ -911,7 +905,7 @@ public class motor : MonoBehaviour
 
     bool KupleHizaliMi(GameObject alt, GameObject ust)
     {
-        return ust != null && alt != null &&
+        return
             ust.transform.position.x == alt.transform.position.x &&
             ust.transform.position.z == alt.transform.position.z &&
             ust.transform.position.y == alt.transform.position.y + 1;
@@ -923,7 +917,6 @@ public class motor : MonoBehaviour
         {
             ust_saga(); yield return Bekle();
             orta_saga(); yield return Bekle();
-            alt_saga(); yield return Bekle();
         }
     }
 
@@ -938,12 +931,12 @@ public class motor : MonoBehaviour
 
     WaitForSeconds Bekle()
     {
-        return new WaitForSeconds(0.2f);
+        return new WaitForSeconds(0.1f);
     }
 
     private IEnumerator RotateSequence()
     {
-        for (int i = 0; i < 15; i++)
+        for (int i = 0; i < 30; i++)
         {
             int randomIndex = Random.Range(0, 18); // 18 fonksiyon var
             switch (randomIndex)
@@ -1081,7 +1074,7 @@ public class motor : MonoBehaviour
 
         Quaternion endRotation = startRotation * deltaRotation;
 
-        float duration = 0.1f;
+        float duration = 0f;
         float elapsed = 0f;
 
         while (elapsed < duration)
