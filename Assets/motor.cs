@@ -2,6 +2,8 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using UnityEngine;
+using UnityEngine.UI;
 
 public class motor : MonoBehaviour
 {
@@ -16,6 +18,9 @@ public class motor : MonoBehaviour
     public GameObject sag_ust_orta_kontrol_SOL;
     public GameObject sag_ust_orta_kontrol_ON;
     public GameObject sag_ust_orta_kontrol_ARKA;
+    int cmpltn = 0;
+    public Slider ilerleme;
+    public Image fillImage;
 
     /*private void Start()
     {
@@ -32,12 +37,26 @@ public class motor : MonoBehaviour
         {
             StartCoroutine(Baslat());
         }
+
+        ilerleme.value = 100f * ((float)cmpltn / 54f);
+
+        if (cmpltn > 0)
+        {
+            Color color = fillImage.color;
+            color.a = 1f; // Görünürse alpha=1, görünmezse alpha=0
+            fillImage.color = color;
+        }
     }
 
     IEnumerator Baslat()
     {
+        cmpltn = 0;
+        Color color = fillImage.color;
+        color.a = 0f; // Görünürse alpha=1, görünmezse alpha=0
+        fillImage.color = color;
+
+        Debug.Log("Rubik küp karılıyor...");
         yield return StartCoroutine(RotateSequence());
-        Debug.Log("Karılma işlemi tamamlandı");
         yield return StartCoroutine(Ustte_arti_olustur());
         Debug.Log("Üstte + işareti oluşturma tamamlandı");
         yield return StartCoroutine(Hareket1());
@@ -113,9 +132,13 @@ public class motor : MonoBehaviour
         Vector3 pos1 = cube1.transform.position;
 
         yield return StartCoroutine(arti_olustur_ara_islem(cube1, 0));
+        cmpltn++;
         yield return StartCoroutine(arti_olustur_ara_islem(cube3, 1));
+        cmpltn++;
         yield return StartCoroutine(arti_olustur_ara_islem(cube5, 2));
+        cmpltn++;
         yield return StartCoroutine(arti_olustur_ara_islem(cube7, 3));
+        cmpltn++;
 
     }
 
@@ -131,7 +154,7 @@ public class motor : MonoBehaviour
 
         if (byz_kontrol_results(cube, ws_ind).ust)
         {
-            //Debug.Log(cube.name + " yerleştirildi");
+            
         }
         else
         {
@@ -282,6 +305,7 @@ public class motor : MonoBehaviour
 
             if (j == 4)
             {
+                //cmpltn++;cmpltn++;
                 break;
             }
             else
@@ -289,6 +313,7 @@ public class motor : MonoBehaviour
                 if (uygun == null)
                 {
                     yield return StartCoroutine(hareket6_algoritma());
+                    //cmpltn++;
                 }
                 else
                 {
@@ -299,6 +324,7 @@ public class motor : MonoBehaviour
                         alt_saga(); yield return Bekle();
                     }
                     yield return StartCoroutine(hareket6_algoritma());
+                    //cmpltn++;
                 }
             }
         }
@@ -328,6 +354,8 @@ public class motor : MonoBehaviour
                 sag_yukari(); yield return Bekle();
                 alt_saga(); yield return Bekle();
             }
+
+            cmpltn++;
         }
 
     }
@@ -384,16 +412,21 @@ public class motor : MonoBehaviour
 
             ust_saga(); yield return Bekle();
         }
+        cmpltn++;
 
         // Hepsi eşleşmişse
         if (max == 4)
         {
             yield return StartCoroutine(MoveCubeToTarget(eslesenler[0], hedefler[eslesenler[0]]));
+            cmpltn++;
+            cmpltn++;
+            cmpltn++;
+            cmpltn++;
             yield break;
         }
 
         // İkili eşleşme varsa
-        if (max == 2)
+        else if (max == 2)
         {
             float fark = Mathf.Abs(Vector3.Distance(eslesenler[0].transform.position, eslesenler[1].transform.position) - 2f);
 
@@ -407,35 +440,41 @@ public class motor : MonoBehaviour
                     orta_saga(); yield return Bekle();
                     alt_saga(); yield return Bekle();
                 }
-                //yield break;
+                cmpltn++;
                 yield return StartCoroutine(hareket5_algoritma());
+                cmpltn++;
 
                 ust_saga(); yield return Bekle();
 
                 ust_saga(); yield return Bekle();
                 orta_saga(); yield return Bekle();
                 alt_saga(); yield return Bekle();
+                cmpltn++;
 
                 yield return StartCoroutine(hareket5_algoritma());
+                cmpltn++;
             }
             else // Yan yana değilse
-            {                
+            {
                 while (!IsOneSag(eslesenler[0], eslesenler[1]))
                 {
                     ust_saga(); yield return Bekle();
                     orta_saga(); yield return Bekle();
                     alt_saga(); yield return Bekle();
                 }
-                //yield break;
+                cmpltn++;
                 ust_saga(); yield return Bekle();
                 orta_saga(); yield return Bekle();
                 alt_saga(); yield return Bekle();
+                cmpltn++;
 
                 ust_saga(); yield return Bekle();
                 orta_saga(); yield return Bekle();
                 alt_saga(); yield return Bekle();
+                cmpltn++;
 
                 yield return StartCoroutine(hareket5_algoritma());
+                cmpltn++;
             }
         }
     }
@@ -484,13 +523,11 @@ public class motor : MonoBehaviour
         GameObject cube22 = FindCubeByName("22");
         GameObject cube24 = FindCubeByName("24");
 
-        foreach (GameObject topmsGobj in topms_gobjs)
+        foreach (GameObject topmsGobj in topms_gobjs) //kırmızı yüzleri dışarı bakan küplerin tespiti
         {
             foreach (GameObject surface in topms)
             {
-                float distance = Vector3.Distance(topmsGobj.transform.position, surface.transform.position);
-                float tolerance = 0.05f;
-                if (Mathf.Abs(distance - 0.5f) < tolerance)
+                if (Vector3.Distance(topmsGobj.transform.position, surface.transform.position) < 0.05f)
                 {
                     switch (surface.name)
                     {
@@ -510,23 +547,24 @@ public class motor : MonoBehaviour
                 }
             }
         }
+        cmpltn++;
 
         if (hazirdegillar.Count == 0)
         {
+            cmpltn++;cmpltn++;cmpltn++;cmpltn++;cmpltn++;
             yield break;
         }
         else if (hazirdegillar.Count == 4)
         {
             yield return StartCoroutine(hareket4_algoritma());
+            cmpltn++;
 
             hazirdegillar.Clear();
             foreach (GameObject topmsGobj in topms_gobjs)
             {
                 foreach (GameObject surface in topms)
                 {
-                    float distance = Vector3.Distance(topmsGobj.transform.position, surface.transform.position);
-                    float tolerance = 0.05f;
-                    if (Mathf.Abs(distance - 0.5f) < tolerance)
+                    if (Vector3.Distance(topmsGobj.transform.position, surface.transform.position) < 0.05f)
                     {
                         switch (surface.name)
                         {
@@ -546,20 +584,22 @@ public class motor : MonoBehaviour
                     }
                 }
             }
+            cmpltn++;
 
             GameObject obj1 = hazirdegillar[0];
             GameObject obj2 = hazirdegillar[1];
 
             while (!IsOneSag(obj1, obj2))
             {
-                ust_saga();
-                yield return Bekle();
+                ust_saga(); yield return Bekle();
             }
-            ust_saga();
-            yield return Bekle();
+            ust_saga(); yield return Bekle();
+            cmpltn++;
 
             yield return StartCoroutine(hareket4_algoritma());
+            cmpltn++;
             yield return StartCoroutine(hareket4_algoritma());
+            cmpltn++;
         }
         else if (hazirdegillar.Count == 2)
         {
@@ -570,26 +610,32 @@ public class motor : MonoBehaviour
 
             if (Mathf.Approximately(mesafe, 2f)) // karşılıklı
             {
-                while (!(Mathf.Approximately(obj1.transform.position.x, 1f) && Mathf.Approximately(obj1.transform.position.z, 0f)))
+                while (!(Mathf.Approximately(obj1.transform.position.x, 0f) && Mathf.Approximately(obj1.transform.position.z, 1f)))
                 {
-                    ust_saga();
-                    yield return Bekle();
+                    ust_saga(); yield return Bekle();
                 }
+                cmpltn++;
 
                 yield return StartCoroutine(hareket4_algoritma());
+                cmpltn++;
+
+                cmpltn++; cmpltn++;cmpltn++;
             }
             else // komşular
             {
                 while (!IsOneSag(obj1, obj2))
                 {
-                    ust_saga();
-                    yield return Bekle();
+                    ust_saga(); yield return Bekle();
                 }
-                ust_saga();
-                yield return Bekle();
+                ust_saga(); yield return Bekle();
+                cmpltn++;
 
                 yield return StartCoroutine(hareket4_algoritma());
+                cmpltn++;
                 yield return StartCoroutine(hareket4_algoritma());
+                cmpltn++;
+                
+                cmpltn++;cmpltn++;
             }
         }
     }
@@ -684,11 +730,13 @@ public class motor : MonoBehaviour
             }
             yield return StartCoroutine(hareket3_sola_tasi());
         }
+        cmpltn++;
 
         while (hedefKüp.transform.position.x != 0 || hedefKüp.transform.position.z != 1)
         {
             ust_saga(); yield return Bekle();
         }
+        cmpltn++;
 
         if (Mathf.Approximately(hedefKüp.transform.eulerAngles.x, aci))
         {
@@ -697,7 +745,9 @@ public class motor : MonoBehaviour
                 orta_saga(); yield return Bekle();
                 alt_saga(); yield return Bekle();
             }
+            cmpltn++;
             yield return StartCoroutine(sola ? hareket3_sola_tasi() : hareket3_saga_tasi());
+            cmpltn++;
         }
         else
         {
@@ -706,7 +756,9 @@ public class motor : MonoBehaviour
                 orta_saga(); yield return Bekle();
                 alt_saga(); yield return Bekle();
             }
+            cmpltn++;
             yield return StartCoroutine(sola ? hareket3_saga_tasi() : hareket3_sola_tasi());
+            cmpltn++;
         }
     }
 
@@ -759,27 +811,30 @@ public class motor : MonoBehaviour
             Mathf.Abs(Vector3.Distance(hedefKüp.transform.position, komsu1.transform.position) - 1f) < 0.001f &&
             Mathf.Abs(Vector3.Distance(hedefKüp.transform.position, komsu2.transform.position) - 1f) < 0.001f)
         {
+            cmpltn++;cmpltn++;cmpltn++;cmpltn++;
             yield break;
         }
 
         if (hedefKüp.transform.position.y == 1) // hedef küp yukardaysa en alt satıra taşı
         {
             while (hedefKüp.transform.position.x != -1 || hedefKüp.transform.position.z != 1)
-                {
-                    ust_saga(); yield return Bekle();
-                    orta_saga(); yield return Bekle();
-                }
+            {
+                ust_saga(); yield return Bekle();
+                orta_saga(); yield return Bekle();
+            }
 
             sag_asagi(); yield return Bekle();
             alt_sola(); yield return Bekle();
             sag_yukari(); yield return Bekle();
             alt_saga(); yield return Bekle();
         }
+        cmpltn++;
 
         while (hedefKüp.transform.position.x != -1 || hedefKüp.transform.position.z != 1) // hedef kübü alt sağa taşı
         {
             alt_saga(); yield return Bekle();
         }
+        cmpltn++;
 
         // Hedef konuma gelecek komşuyu hizaya getir
         while (komsu1.transform.position.x != -1 || komsu1.transform.position.z != 0)
@@ -787,6 +842,7 @@ public class motor : MonoBehaviour
             ust_saga(); yield return Bekle();
             orta_saga(); yield return Bekle();
         }
+        cmpltn++;
 
         while (hedefKüp.transform.position.x != -1 || hedefKüp.transform.position.z != 1 ||
                 hedefKüp.transform.position.y != 1 ||
@@ -797,6 +853,7 @@ public class motor : MonoBehaviour
             sag_yukari(); yield return Bekle();
             alt_saga(); yield return Bekle();
         }
+        cmpltn++;
     }
 
     IEnumerator Hareket1()
@@ -834,8 +891,8 @@ public class motor : MonoBehaviour
 
             orta_saga(); yield return Bekle();
         }
+        cmpltn++;
 
-        Debug.Log((hiza1, hiza2, hiza3, hiza4));
 
         if (max == 4)
         {
@@ -843,9 +900,10 @@ public class motor : MonoBehaviour
             {
                 orta_saga(); yield return Bekle();
             }
+            cmpltn++;cmpltn++;
         }
 
-        if (max == 2)
+        else if (max == 2)
         {
             //karşılıklıysa
             if ((hiza2 && hiza3) || (hiza1 && hiza4))
@@ -872,11 +930,13 @@ public class motor : MonoBehaviour
                         ust_saga(); yield return Bekle();
                     }
                 }
+                cmpltn++;
                 yield return NihaiHareket();
                 ust_sola(); yield return Bekle();
                 ust_sola(); yield return Bekle();
                 orta_sola(); yield return Bekle();
                 yield return NihaiHareket();
+                cmpltn++;
             }
             else // komşuysa
             {
@@ -891,6 +951,7 @@ public class motor : MonoBehaviour
                     if (KupleHizaliMi(cube15, cube7)) { i++; }
                     if (KupleHizaliMi(cube12, cube3)) { i++; }
                 }
+                cmpltn++;
 
                 if (hiza1 && hiza3) yield return HizaAyari(cube5);
                 if (hiza3 && hiza4) yield return HizaAyari(cube7);
@@ -899,6 +960,7 @@ public class motor : MonoBehaviour
 
                 // nihai algoritma
                 yield return NihaiHareket();
+                cmpltn++;
             }
         }
     }
