@@ -97,10 +97,12 @@ Projenin **doğru şekilde çalışabilmesi** için aşağıdaki klasörü indir
 
 1. Bağlantıdaki klasörü projenin kök dizinine ekleyin.
 2. Unity üzerinde projeyi açın ve çalıştırın.
-3. **Boşluk** tuşuna bastığınızda rubik ilk önce karılacak ve ardından çözülecektir. Çözüm aşamalarında tamamlanan adımlar bildirilir.
+3. **Boşluk** tuşuna bastığınızda rubik ilk önce karılacak ve ardından çözülecektir.
+4. Çözüm aşamalarında tamamlanan adımlar bildirilir.
+5. Çözüm esnasında ilerleme durumunu gösteren bar çubuktan kübün çözülme durumunu takip edebilirsiniz.
 
 ---
 
 ## Not
 
-Proje hâlâ geliştirme aşamasındadır. Nadiren de olsa **HAREKET5** aşamasında ufak bozulmalar oluşabilmektedir. İlerleyen sürümlerde bu hatalar minimize edilecektir.
+**HAREKET1** aşamasında nadiren de olsa bozulmalar olmaktadır ancak program çok yüksek olasılıkla başarıyla rubik kübü çözer. İlerleyen zamanlarda bu hata da düzeltilecektir.
