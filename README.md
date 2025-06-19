@@ -74,7 +74,7 @@ Proje, Rubik küpü **üst satırdan başlanarak** üç satır halinde sırasıy
 - **Uyuşan köşe** var mı kontrol edilir:
   - Yoksa → rastgele bir pozisyondayken algoritma çalıştırılır → ardından başa dönülür.
   - Varsa → uyuşan köşe sağa alınır → 4 köşe oturana kadar algoritma tekrar edilir.
-- **Son adım:** 4 köşe için **HAREKET1** algoritması tekrar uygulanır.
+- **Son adım:** 4 köşe için **HAREKET3** algoritması tekrar uygulanır.
 
 ---
 
