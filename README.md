@@ -1,6 +1,6 @@
 # 3D Rubik Küp Çözücü (Unity)
 
-Bu proje **Unity** platformunda geliştirilmiş bir **3D Rubik Küp Çözücü** uygulamasıdır. Çözüm adımlarının bazılarında nadiren küçük hatalar görülebilse de genel olarak **yüksek başarı oranıyla** küp doğru şekilde çözülmektedir.
+Bu proje **Unity** platformunda geliştirilmiş bir **3D Rubik Küp Çözücü** uygulamasıdır. **Yüksek başarı oranıyla** küp doğru şekilde çözülmektedir.
 
 ## Çözüm Algoritmaları
 
